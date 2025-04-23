@@ -1,5 +1,3 @@
-import { Response } from "express";
-
 export const sendResponse = ({
   status,
   data,
