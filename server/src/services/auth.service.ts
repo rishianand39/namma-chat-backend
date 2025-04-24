@@ -51,6 +51,7 @@ export class AuthService {
     });
     const shouldSend = Boolean(process.env.SEND_OTP_ON_PHONE);
 
+    
     if (shouldSend) {
       // Integrate SMS sending service here ()
       
