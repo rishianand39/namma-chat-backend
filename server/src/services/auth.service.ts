@@ -52,7 +52,7 @@ export class AuthService {
     const shouldSend = Boolean(process.env.SEND_OTP_ON_PHONE);
 
     if (shouldSend) {
-      // Integrate SMS sending service here (e.g., Twilio)
+      // Integrate SMS sending service here ()
       
       return { message: "OTP sent to your phone" };
     } else {
