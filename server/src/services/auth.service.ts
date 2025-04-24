@@ -39,7 +39,6 @@ export class AuthService {
         from: process.env.TWILIO_PHONE_NUMBER,
         to: `+91${phone}`,
       });
-      
       return {
         status: true,
         code: 200,
