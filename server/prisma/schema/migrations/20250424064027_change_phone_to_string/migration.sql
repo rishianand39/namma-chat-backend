@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Otp" ALTER COLUMN "phone" SET DATA TYPE TEXT;
+
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "phone" SET DATA TYPE TEXT;

@@ -12,53 +12,23 @@ import { sendResponse } from '../utils/helper';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  async register(req: Request, res: Response) {
-    try {
-      const user = await this.authService.register(req.body);
-      res.json(sendResponse({
-        status: true,
-        code: 200,
-        data: user,
-        message: 'User registered successfully',
-      }));
-    } catch (err: any) {
-      res.json(sendResponse({
-        status: false,
-        code: 500,
-        message: err.message,
-      }))
-    }
-  }
-
-  async login(req: Request, res: Response) {
-    try {
-      const token = await this.authService.login(req.body);
-      res.json(sendResponse({
-        status: true,
-        code: 200,
-        data: token,
-        message: 'User logged in successfully',
-      }));
-    } catch (err: any) {
-      res.json(sendResponse({
-        status: false,
-        code: 500,
-        message: err.message,
-      }));
-    }
-  }
-
   async sendOtp(req: Request, res: Response) {
     try {
-      const otp = await this.authService.sendOtp(req.body);
+      const otpResponseObj = await this.authService.sendOtp(req.body);
+      res.json(sendResponse(otpResponseObj));
+    } catch (err: any) {
       res.json(sendResponse({
-        status: true,
-        code: 200,
-        data: {
-          otp,
-        },
-        message: 'Otp sent successfully',
+        status: false,
+        code: 500,
+        message: err.message,
       }));
+    }
+  }
+
+  async verifyOtp(req: Request, res: Response) {
+    try {
+      const verifyOtpResponse = await this.authService.verifyOtp(req.body);
+      res.json(sendResponse(verifyOtpResponse));
     } catch (err: any) {
       res.json(sendResponse({
         status: false,

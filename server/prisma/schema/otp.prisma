@@ -1,7 +1,7 @@
 model Otp {
   id         String   @id @default(uuid())
-  phone      Int
-  code        Int
+  phone      String
+  code        String
   expires_at  DateTime
   verified   Boolean  @default(false)
   created_at  DateTime @default(now())
