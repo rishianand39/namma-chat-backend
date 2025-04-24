@@ -8,12 +8,19 @@ dotend.config();
 export class AuthService {
   private prisma = new PrismaClient();
 
-  async register({ password, phone }: any) {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await this.prisma.user.create({
-      data: { password: hashedPassword, phone },
-    });
-    return user;
+  async register({ phone }: { phone: number }) {
+    if (!phone) return new Error("Phone number is required");
+    if (phone.toString().length !== 10) return new Error("Phone number must be 10 digits");
+  
+    const user = await this.prisma.user.findUnique({ where: { phone } });
+    if (user) return new Error("User already exists");
+  
+    // Call sendOtp
+    const otpResponse = await this.sendOtp({ phone });
+  
+    return {
+      otpResponse
+    };
   }
 
   async login({ email, password }: { email: string; password: string }) {
@@ -42,7 +49,16 @@ export class AuthService {
         expires_at : expiresAt,
       }
     });
-    return otp;
+    const shouldSend = Boolean(process.env.SEND_OTP_ON_PHONE);
+
+    if (shouldSend) {
+      // Integrate SMS sending service here (e.g., Twilio)
+      
+      return { message: "OTP sent to your phone" };
+    } else {
+      // Return OTP in response (useful for testing/dev)
+      return { otp, expiresAt };
+    }
   }
 
   async verifyOtp(phone: number, userOtp: number) {
