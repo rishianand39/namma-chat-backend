@@ -1,7 +1,6 @@
-import { Request, Response } from 'express';
-import { AuthService } from '../services/auth.service';
-import { sendResponse } from '../utils/helper';
-
+import { Request, Response } from "express";
+import { AuthService } from "../services/auth.service";
+import { sendResponse } from "../utils/helper";
 
 // private authService: AuthService;
 
@@ -17,11 +16,13 @@ export class AuthController {
       const otpResponseObj = await this.authService.sendOtp(req.body);
       res.json(sendResponse(otpResponseObj));
     } catch (err: any) {
-      res.json(sendResponse({
-        status: false,
-        code: 500,
-        message: err.message,
-      }));
+      res.json(
+        sendResponse({
+          status: false,
+          code: 500,
+          message: err.message,
+        })
+      );
     }
   }
 
@@ -30,11 +31,14 @@ export class AuthController {
       const verifyOtpResponse = await this.authService.verifyOtp(req.body);
       res.json(sendResponse(verifyOtpResponse));
     } catch (err: any) {
-      res.json(sendResponse({
-        status: false,
-        code: 500,
-        message: err.message,
-      }));
+      res.json(
+        sendResponse({
+          status: false,
+          code: 500,
+          message: err.message,
+        })
+      );
     }
   }
+
 }

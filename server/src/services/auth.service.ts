@@ -1,8 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
-import dotend from "dotenv";
+import dotenv from "dotenv";
 import twilio from "twilio";
-dotend.config();
+dotenv.config();
 
 export class AuthService {
   private prisma = new PrismaClient();
@@ -39,7 +39,7 @@ export class AuthService {
         from: process.env.TWILIO_PHONE_NUMBER,
         to: `+91${phone}`,
       });
-      
+
       return {
         status: true,
         code: 200,
@@ -59,9 +59,10 @@ export class AuthService {
   }
 
   async geneateToken(userId: string) {
-    const token = jwt.sign({ userId }, process.env.JWT_SECRET!, {
-      expiresIn: process.env.JWT_EXPIRY ? parseInt(process.env.JWT_EXPIRY, 10) : "7d",
-    });
+    const secret = process.env.JWT_SECRET!;
+    const expiresIn = (process.env.JWT_EXPIRY || "7d") as jwt.SignOptions["expiresIn"];
+
+    const token = jwt.sign({ userId }, secret, { expiresIn });
     return token;
   }
 
@@ -133,4 +134,51 @@ export class AuthService {
       };
     }
   }
+
+  async getUser({ userId }: { userId: string }) {
+    let user = await this.prisma.user.findFirst({
+      where: { id: userId },
+    });
+    return {
+      id: user?.id,
+      name: user?.name,
+      phone: user?.phone,
+      email: user?.email,
+      profile_image: user?.profile_image,
+      about: user?.about,
+    };
+  }
+
+  async updateUser({ userId, data }: { userId: string; data: {
+    name?: string;
+    email?: string;
+    profile_image?: string;
+    about?: string;
+  } }) {
+    const user = await this.prisma.user.update({
+      where: { id: userId },
+      data,
+    });
+    return {
+      id: user.id,
+      name: user.name,
+      phone: user.phone,
+      email: user.email,
+      profile_image: user.profile_image,
+      about: user.about,
+    };
+  }
+  
+  async deleteUser({ userId }: { userId: string }) {
+    await this.prisma.user.delete({
+      where: { id: userId },
+    });
+    return {
+      message: "User deleted successfully",
+      status: true,
+      code: 200,
+    };
+  }
+
+
 }

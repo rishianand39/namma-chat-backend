@@ -5,6 +5,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { Server as SocketIOServer } from 'socket.io';
 import authRoutes from "./routes/auth.routes"
+import userRoutes from "./routes/user.routes"
 // (chatRoutes, messageRoutes coming soon)
 
 dotenv.config();
@@ -20,6 +21,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
+app.use("/api/user", userRoutes)
 
 io.on('connection', (socket) => {
   console.log(`Socket connected: ${socket.id}`);

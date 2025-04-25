@@ -8,7 +8,7 @@ model User {
   phone        String    @unique
   name         String?    
   about        String? 
-  profileImage String?   
+  profile_image String?   
 }
 
 model Chat {
