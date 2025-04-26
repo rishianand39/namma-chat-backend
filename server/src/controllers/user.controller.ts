@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { sendResponse } from "../utils/helper";
 import { UserService } from "../services/user.service";
+import { RESPONSE_CODE } from "../constant";
 
 export class UserController {
   constructor(private authService: UserService) {}
@@ -14,7 +15,7 @@ export class UserController {
         res.json(
           sendResponse({
             status: false,
-            code: 404,
+            code: RESPONSE_CODE?.NOT_FOUND,
             message: "User not found",
           })
         );
@@ -23,7 +24,7 @@ export class UserController {
       res.json(
         sendResponse({
           status: true,
-          code: 200,
+          code: RESPONSE_CODE?.SUCCESS,
           data: user,
         })
       );
@@ -31,7 +32,7 @@ export class UserController {
       res.json(
         sendResponse({
           status: false,
-          code: 500,
+          code: RESPONSE_CODE?.SERVER_ERROR,
           message: err.message,
         })
       );
@@ -47,7 +48,7 @@ export class UserController {
         res.json(
           sendResponse({
             status: false,
-            code: 404,
+            code: RESPONSE_CODE?.NOT_FOUND,
             message: "User not found",
           })
         );
@@ -56,7 +57,7 @@ export class UserController {
       res.json(
         sendResponse({
           status: true,
-          code: 200,
+          code: RESPONSE_CODE?.SUCCESS,
           data: user,
         })
       );
@@ -64,7 +65,7 @@ export class UserController {
       res.json(
         sendResponse({
           status: false,
-          code: 500,
+          code: RESPONSE_CODE?.SERVER_ERROR,
           message: err.message,
         })
       );
@@ -79,7 +80,7 @@ export class UserController {
         res.json(
           sendResponse({
             status: false,
-            code: 404,
+            code: RESPONSE_CODE?.NOT_FOUND,
             message: "User not found",
           })
         );
@@ -88,7 +89,8 @@ export class UserController {
       res.json(
         sendResponse({
           status: true,
-          code: 200,
+          code: RESPONSE_CODE?.SUCCESS,
+          message: "User deleted successfully",
           data: user,
         })
       );
@@ -96,7 +98,7 @@ export class UserController {
       res.json(
         sendResponse({
           status: false,
-          code: 500,
+          code: RESPONSE_CODE?.SERVER_ERROR,
           message: err.message,
         })
       );

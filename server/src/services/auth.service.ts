@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import twilio from "twilio";
+import { RESPONSE_CODE } from "../constant";
 dotenv.config();
 
 export class AuthService {
@@ -42,7 +43,7 @@ export class AuthService {
 
       return {
         status: true,
-        code: 200,
+        code: RESPONSE_CODE?.SUCCESS,
         message: "OTP sent successfully",
       };
     } else {
@@ -53,7 +54,7 @@ export class AuthService {
         },
         message: "OTP generated successfully",
         status: true,
-        code: 200,
+        code: RESPONSE_CODE?.SUCCESS,
       };
     }
   }
@@ -72,7 +73,7 @@ export class AuthService {
         return {
           message: "Phone number and OTP are required",
           status: false,
-          code: 500,
+          code: RESPONSE_CODE?.SERVER_ERROR,
         };
       }
       const otpRecord = await this.prisma.otp.findFirst({
@@ -89,7 +90,7 @@ export class AuthService {
         return {
           message: "Invalid or expired OTP",
           status: false,
-          code: 500,
+          code: RESPONSE_CODE?.NOT_FOUND,
         };
       }
 
@@ -124,13 +125,13 @@ export class AuthService {
         },
         message: "OTP verified successfully",
         status: true,
-        code: 200,
+        code: RESPONSE_CODE?.SUCCESS,
       };
     } catch (error: any) {
       return {
         message: error.message,
         status: false,
-        code: 500,
+        code: RESPONSE_CODE?.SERVER_ERROR,
       };
     }
   }
@@ -176,7 +177,7 @@ export class AuthService {
     return {
       message: "User deleted successfully",
       status: true,
-      code: 200,
+      code: RESPONSE_CODE?.SUCCESS,
     };
   }
 

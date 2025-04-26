@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { AuthService } from "../services/auth.service";
 import { sendResponse } from "../utils/helper";
+import { RESPONSE_CODE } from "../constant";
 
 // private authService: AuthService;
 
@@ -19,7 +20,7 @@ export class AuthController {
       res.json(
         sendResponse({
           status: false,
-          code: 500,
+          code: RESPONSE_CODE?.SERVER_ERROR,
           message: err.message,
         })
       );
@@ -34,7 +35,7 @@ export class AuthController {
       res.json(
         sendResponse({
           status: false,
-          code: 500,
+          code: RESPONSE_CODE?.SERVER_ERROR,
           message: err.message,
         })
       );

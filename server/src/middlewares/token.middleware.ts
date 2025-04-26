@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { sendResponse } from "../utils/helper";
+import { RESPONSE_CODE } from "../constant";
 
 export const authenticate = (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization?.split(" ")[1];
@@ -14,6 +15,6 @@ export const authenticate = (req: Request, res: Response, next: NextFunction) =>
     (req as any).user = decoded;
     next();
   } catch (err) {
-    res.json(sendResponse({ message: "Invalid token", code: 403, status: false }));
+    res.json(sendResponse({ message: "Invalid token", code: RESPONSE_CODE?.FORBIDDEN, status: false }));
   }
 };
