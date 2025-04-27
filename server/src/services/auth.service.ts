@@ -59,11 +59,11 @@ export class AuthService {
     }
   }
 
-  async geneateToken(userId: string) {
+  async geneateToken(user_id: string) {
     const secret = process.env.JWT_SECRET!;
     const expiresIn = (process.env.JWT_EXPIRY || "7d") as jwt.SignOptions["expiresIn"];
 
-    const token = jwt.sign({ userId }, secret, { expiresIn });
+    const token = jwt.sign({ user_id }, secret, { expiresIn });
     return token;
   }
 

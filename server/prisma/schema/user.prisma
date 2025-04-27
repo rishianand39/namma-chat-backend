@@ -1,41 +1,44 @@
-
 model User {
-  id       String   @id @default(uuid())
-  email    String?   @unique
-  password String?
-  messages Message[]
-  chat_users ChatUser[]
-  phone        String    @unique
-  name         String?    
-  about        String? 
-  profile_image String?   
+  id            String     @id @default(uuid())
+  email         String?    @unique
+  password      String?
+  messages      Message[]
+  chat_users    ChatUser[]
+  phone         String     @unique
+  name          String?
+  about         String?
+  profile_image String?
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
+  is_online     Boolean    @default(false)
+  last_seen     DateTime?
 }
 
 model Chat {
-  id       String   @id @default(uuid())
-  is_group  Boolean  @default(false)
+  id       String     @id @default(uuid())
+  is_group Boolean    @default(false)
   name     String?
   users    ChatUser[]
   messages Message[]
 }
 
 model ChatUser {
-  id     String  @id @default(uuid())
-  chat   Chat    @relation(fields: [chat_id], references: [id])
-  chat_id String
-  user   User    @relation(fields: [user_id], references: [id])
-  user_id String
+  id        String   @id @default(uuid())
+  chat      Chat     @relation(fields: [chat_id], references: [id])
+  chat_id   String
+  user      User     @relation(fields: [user_id], references: [id])
+  user_id   String
   joined_at DateTime @default(now())
 }
 
 model Message {
-  id        String   @id @default(uuid())
-  content   String?
+  id         String    @id @default(uuid())
+  content    String?
   file_url   String?
   seen_at    DateTime?
-  created_at DateTime @default(now())
-  sender    User     @relation(fields: [sender_id], references: [id])
+  created_at DateTime  @default(now())
+  sender     User      @relation(fields: [sender_id], references: [id])
   sender_id  String
-  chat      Chat     @relation(fields: [chat_id], references: [id])
+  chat       Chat      @relation(fields: [chat_id], references: [id])
   chat_id    String
 }
