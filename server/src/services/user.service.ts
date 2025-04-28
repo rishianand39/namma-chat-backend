@@ -6,7 +6,7 @@ export class UserService {
   private prisma = new PrismaClient();
 
 
-  async getUser({ user_id }: { user_id: string }) {
+  async getUser(user_id : string ) {
     let user = await this.prisma.user.findFirst({
       where: { id: user_id },
     });

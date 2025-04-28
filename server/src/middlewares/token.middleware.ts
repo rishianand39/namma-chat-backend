@@ -5,6 +5,7 @@ import { RESPONSE_CODE } from "../constant";
 
 export const authenticate = (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization?.split(" ")[1];
+  
   if (!token) {
     res.json(sendResponse({ message: "Access Denied: No token provided", code: 401, status: false }));
     return;

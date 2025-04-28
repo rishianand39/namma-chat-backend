@@ -47,7 +47,6 @@ export class AuthService {
         message: "OTP sent successfully",
       };
     } else {
-      console.log(otp, "otp");
       return {
         data: {
           otp: otp,
