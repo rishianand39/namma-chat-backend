@@ -19,3 +19,20 @@ export const authenticate = (req: Request, res: Response, next: NextFunction) =>
     res.json(sendResponse({ message: "Invalid token", code: RESPONSE_CODE?.FORBIDDEN, status: false }));
   }
 };
+
+
+
+export const authenticateSocket = (socket: any, next: Function) => {
+  const token = socket.handshake.headers.token?.split(" ")[1];
+  if (!token) {
+    return next(new Error("Access Denied: No token provided"));
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+    (socket as any).user = decoded; 
+    next(); 
+  } catch (err) {
+    return next(new Error("Invalid token"));
+  }
+};

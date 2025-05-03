@@ -7,9 +7,15 @@ import { Server as SocketIOServer } from 'socket.io';
 import authRoutes from "./routes/auth.routes"
 import userRoutes from "./routes/user.routes"
 import { setupSocketServer } from './socket/socket.handler';
-// (chatRoutes, messageRoutes coming soon)
+import { authenticateSocket } from './middlewares/token.middleware';
 
 dotenv.config();
+
+declare module 'socket.io' {
+  interface Socket {
+    user?: any; 
+  }
+}
 const app = express();
 const server = http.createServer(app);
 
@@ -19,6 +25,7 @@ const io = new SocketIOServer(server, {
   },
 });
 
+io.use(authenticateSocket);
 
 setupSocketServer(io);
 
@@ -30,4 +37,4 @@ app.use("/api/user", userRoutes)
 
 
 const PORT = process.env.PORT || 5001;
-server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

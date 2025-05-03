@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import twilio from "twilio";
 import { RESPONSE_CODE } from "../constant";
+import { stat } from "fs";
 dotenv.config();
 
 export class AuthService {
@@ -28,6 +29,7 @@ export class AuthService {
         expires_at: expiresAt,
       },
     });
+    
     const shouldSend = process.env.SEND_OTP_ON_PHONE === "true";
     if (shouldSend) {
       const accountSid = process.env.TWILIO_ACCOUNT_SID;
@@ -160,12 +162,16 @@ export class AuthService {
       data,
     });
     return {
-      id: user.id,
-      name: user.name,
-      phone: user.phone,
-      email: user.email,
-      profile_image: user.profile_image,
-      about: user.about,
+      status: true,
+      code: RESPONSE_CODE?.SUCCESS,
+      data : {
+        id: user.id,
+        name: user.name,
+        phone: user.phone,
+        email: user.email,
+        profile_image: user.profile_image,
+        about: user.about,
+      }
     };
   }
   
