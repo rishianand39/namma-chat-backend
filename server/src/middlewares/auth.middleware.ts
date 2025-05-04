@@ -36,3 +36,10 @@ export const authenticateSocket = (socket: any, next: Function) => {
     return next(new Error("Invalid token"));
   }
 };
+
+export function getUserFromSocket(socket: any) {
+  if (!socket.user || !socket.user.user_id) {
+    throw new Error("User not found on socket");
+  }
+  return socket.user;
+}

@@ -6,8 +6,9 @@ import dotenv from 'dotenv';
 import { Server as SocketIOServer } from 'socket.io';
 import authRoutes from "./routes/auth.routes"
 import userRoutes from "./routes/user.routes"
-import { setupSocketServer } from './socket/socket.handler';
-import { authenticateSocket } from './middlewares/token.middleware';
+import messageRoutes from "./routes/message.routes"
+import { setupSocketServer } from './socket/setupSocketServer';
+import { authenticateSocket } from './middlewares/auth.middleware';
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 app.use("/api/user", userRoutes)
+app.use("/api/messages", messageRoutes);
 
 
 const PORT = process.env.PORT || 5001;
