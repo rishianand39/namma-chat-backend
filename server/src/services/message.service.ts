@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 export class MessageService {
   private prisma = new PrismaClient();
@@ -12,7 +12,7 @@ export class MessageService {
       orderBy: {
         timestamp: "asc",
       },
-    });
+    }) ;
   }
 
   async saveMessage(payload: {
@@ -26,6 +26,6 @@ export class MessageService {
         receiver_user_id: payload.receiver_user_id,
         content: payload.content,
       },
-    });
+    }) ;
   }
 }

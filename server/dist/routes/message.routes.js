@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+const message_controller_1 = require("../controllers/message.controller");
+const message_service_1 = require("../services/message.service");
+const router = (0, express_1.Router)();
+const controller = new message_controller_1.MessageController(new message_service_1.MessageService());
+router.get("/unread", auth_middleware_1.authenticate, controller.getUnreadMessages.bind(controller));
+exports.default = router;
