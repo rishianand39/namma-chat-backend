@@ -25,9 +25,6 @@ export class MessageService {
         sender_user_id: payload.sender_user_id,
         receiver_user_id: payload.receiver_user_id,
         content: payload.content,
-        // `read` and `timestamp` are already defaulted in schema, so this is optional:
-        // read: false,
-        // timestamp: new Date(),
       },
     });
   }

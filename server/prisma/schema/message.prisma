@@ -1,0 +1,8 @@
+model Message {
+  id              String   @id @default(uuid())
+  sender_user_id    String
+  receiver_user_id  String
+  content         String
+  timestamp       DateTime @default(now())
+  read            Boolean  @default(false)
+}
