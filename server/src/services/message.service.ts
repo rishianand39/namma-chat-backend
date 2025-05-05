@@ -4,7 +4,7 @@ export class MessageService {
   private prisma = new PrismaClient();
 
   async getUnreadMessages(user_id: string) {
-    const unreadMessages = await this.prisma.message.findMany({
+    return await this.prisma.message.findMany({
       where: {
         receiver_user_id: user_id,
         read: false,
@@ -13,7 +13,6 @@ export class MessageService {
         timestamp: "asc",
       },
     });
-    return unreadMessages
   }
 
   async saveMessage(payload: {
@@ -26,10 +25,10 @@ export class MessageService {
         sender_user_id: payload.sender_user_id,
         receiver_user_id: payload.receiver_user_id,
         content: payload.content,
-        read: false,
-        timestamp: new Date(),
+        // `read` and `timestamp` are already defaulted in schema, so this is optional:
+        // read: false,
+        // timestamp: new Date(),
       },
     });
   }
-  
 }
