@@ -28,4 +28,25 @@ export class MessageService {
       },
     }) ;
   }
+  async markMessageAsRead(payload: {
+    message_id: string;
+    read_at: Date;
+  }) {
+    return await this.prisma.message.update({
+      where: {
+        id: payload.message_id,
+      },
+      data: {
+        read: true,
+        read_at: payload.read_at,
+      },
+    }) ;
+  }
+  async markMessageAsDelivered(message_id: string, delivered_at: Date) {
+    return await this.prisma.message.update({
+      where: { id: message_id },
+      data: { delivered_at }
+    });
+  }
+ 
 }

@@ -1,4 +1,4 @@
-import { Server } from "socket.io"
+import { Server } from "socket.io";
 import { getUserFromSocket } from "../middlewares/auth.middleware";
 import { registerMessageHandlers } from "./handlers/message.handlers";
 
@@ -9,7 +9,9 @@ export function setupSocketServer(io: Server) {
     const user = getUserFromSocket(socket);
     onlineUsers.set(user.user_id, socket.id);
 
-    console.log(`User connected: ${socket.id}, User ID: ${user.user_id}`);
+    // Broadcast to all others that this user is online
+    socket.broadcast.emit("user-online", { user_id: user.user_id });
+    // console.log(`User connected: ${socket.id}, User ID: ${user.user_id}`);
 
     // Register message-related handlers
     await registerMessageHandlers(io, socket, user.user_id, onlineUsers);
@@ -17,7 +19,9 @@ export function setupSocketServer(io: Server) {
     socket.on("disconnect", () => {
       console.log(`User disconnected: ${socket.id}`);
       onlineUsers.delete(user.user_id);
+
+      // Broadcast to others that this user is offline
+      socket.broadcast.emit("user-offline", { user_id: user.user_id });
     });
   });
 }
-

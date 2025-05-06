@@ -5,4 +5,6 @@ model Message {
   content         String
   timestamp       DateTime @default(now())
   read            Boolean  @default(false)
+  read_at         DateTime?
+  delivered_at  DateTime?
 }
