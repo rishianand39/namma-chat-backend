@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 export class MessageService {
   private prisma = new PrismaClient();
@@ -12,7 +12,7 @@ export class MessageService {
       orderBy: {
         timestamp: "asc",
       },
-    });
+    }) ;
   }
 
   async saveMessage(payload: {
@@ -26,6 +26,33 @@ export class MessageService {
         receiver_user_id: payload.receiver_user_id,
         content: payload.content,
       },
+    }) ;
+  }
+  async markMessageAsRead(payload: {
+    message_id: string;
+    read_at: Date;
+  }) {
+    return await this.prisma.message.update({
+      where: {
+        id: payload.message_id,
+      },
+      data: {
+        read: true,
+        read_at: payload.read_at,
+      },
+    }) ;
+  }
+  async markMessageAsDelivered({
+    message_id,
+    delivered_at
+  }: {
+    message_id: string;
+    delivered_at: Date;
+  }) {
+    return await this.prisma.message.update({
+      where: { id: message_id },
+      data: { delivered_at }
     });
   }
+ 
 }
