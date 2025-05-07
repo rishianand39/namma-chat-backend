@@ -46,16 +46,15 @@ export async function registerMessageHandlers(
       io.to(receiverSocketId).emit("receive-message", response);
 
       // Notify sender that message was delivered
-      socket.emit("delivered", {
+      socket.emit("message-delivered", {
         message_id: savedMessage.id,
         delivered_at: new Date().toISOString(),
       });
-      
-    } else {
-      await messageService.saveMessage({
-        sender_user_id: userId,
-        receiver_user_id: data.receiver_user_id,
-        content: data.message,
+
+      // Optionally update DB
+      await messageService.markMessageAsDelivered({
+        message_id: savedMessage.id,
+        delivered_at: new Date(),
       });
     }
   });

@@ -42,7 +42,13 @@ export class MessageService {
       },
     }) ;
   }
-  async markMessageAsDelivered(message_id: string, delivered_at: Date) {
+  async markMessageAsDelivered({
+    message_id,
+    delivered_at
+  }: {
+    message_id: string;
+    delivered_at: Date;
+  }) {
     return await this.prisma.message.update({
       where: { id: message_id },
       data: { delivered_at }
