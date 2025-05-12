@@ -39,5 +39,26 @@ class MessageService {
             });
         });
     }
+    markMessageAsRead(payload) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.prisma.message.update({
+                where: {
+                    id: payload.message_id,
+                },
+                data: {
+                    read: true,
+                    read_at: payload.read_at,
+                },
+            });
+        });
+    }
+    markMessageAsDelivered(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ message_id, delivered_at }) {
+            return yield this.prisma.message.update({
+                where: { id: message_id },
+                data: { delivered_at }
+            });
+        });
+    }
 }
 exports.MessageService = MessageService;

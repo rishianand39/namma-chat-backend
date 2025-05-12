@@ -29,7 +29,7 @@ export class AuthService {
         expires_at: expiresAt,
       },
     });
-    
+
     const shouldSend = process.env.SEND_OTP_ON_PHONE === "true";
     if (shouldSend) {
       const accountSid = process.env.TWILIO_ACCOUNT_SID;
@@ -151,12 +151,18 @@ export class AuthService {
     };
   }
 
-  async updateUser({ userId, data }: { userId: string; data: {
-    name?: string;
-    email?: string;
-    profile_image?: string;
-    about?: string;
-  } }) {
+  async updateUser({
+    userId,
+    data,
+  }: {
+    userId: string;
+    data: {
+      name?: string;
+      email?: string;
+      profile_image?: string;
+      about?: string;
+    };
+  }) {
     const user = await this.prisma.user.update({
       where: { id: userId },
       data,
@@ -164,17 +170,17 @@ export class AuthService {
     return {
       status: true,
       code: RESPONSE_CODE?.SUCCESS,
-      data : {
+      data: {
         id: user.id,
         name: user.name,
         phone: user.phone,
         email: user.email,
         profile_image: user.profile_image,
         about: user.about,
-      }
+      },
     };
   }
-  
+
   async deleteUser({ userId }: { userId: string }) {
     await this.prisma.user.delete({
       where: { id: userId },
@@ -185,6 +191,4 @@ export class AuthService {
       code: RESPONSE_CODE?.SUCCESS,
     };
   }
-
-
 }

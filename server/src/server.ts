@@ -14,8 +14,8 @@ const app = express();
 dotenv.config();
 app.use(
   cors({
-    origin: ["*"],
-    credentials: true,
+    origin: ["*", "http://localhost:3000", "https://rishianand.me", "https://rishianand.me/"],
+    // credentials: true,
   })
 );
 
@@ -36,7 +36,6 @@ io.use(authenticateSocket);
 
 setupSocketServer(io);
 
-app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);

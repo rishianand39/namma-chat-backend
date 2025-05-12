@@ -17,12 +17,16 @@ function setupSocketServer(io) {
     io.on("connection", (socket) => __awaiter(this, void 0, void 0, function* () {
         const user = (0, auth_middleware_1.getUserFromSocket)(socket);
         onlineUsers.set(user.user_id, socket.id);
-        console.log(`User connected: ${socket.id}, User ID: ${user.user_id}`);
+        // Broadcast to all others that this user is online
+        socket.broadcast.emit("user-online", { user_id: user.user_id });
+        // console.log(`User connected: ${socket.id}, User ID: ${user.user_id}`);
         // Register message-related handlers
         yield (0, message_handlers_1.registerMessageHandlers)(io, socket, user.user_id, onlineUsers);
         socket.on("disconnect", () => {
             console.log(`User disconnected: ${socket.id}`);
             onlineUsers.delete(user.user_id);
+            // Broadcast to others that this user is offline
+            socket.broadcast.emit("user-offline", { user_id: user.user_id });
         });
     }));
 }

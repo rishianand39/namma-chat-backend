@@ -14,19 +14,22 @@ const user_routes_1 = __importDefault(require("./routes/user.routes"));
 const message_routes_1 = __importDefault(require("./routes/message.routes"));
 const setupSocketServer_1 = require("./socket/setupSocketServer");
 const auth_middleware_1 = require("./middlewares/auth.middleware");
-dotenv_1.default.config();
 const app = (0, express_1.default)();
+dotenv_1.default.config();
+app.use((0, cors_1.default)({
+    origin: ["*"],
+    credentials: true,
+}));
 const server = http_1.default.createServer(app);
 const io = new socket_io_1.Server(server, {
     cors: {
-        origin: '*',
+        origin: "*",
     },
 });
 io.use(auth_middleware_1.authenticateSocket);
 (0, setupSocketServer_1.setupSocketServer)(io);
-app.use((0, cors_1.default)());
 app.use(express_1.default.json());
-app.use('/api/auth', auth_routes_1.default);
+app.use("/api/auth", auth_routes_1.default);
 app.use("/api/user", user_routes_1.default);
 app.use("/api/messages", message_routes_1.default);
 const PORT = process.env.PORT || 5001;
