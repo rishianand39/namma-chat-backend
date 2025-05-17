@@ -10,6 +10,8 @@ router.get('/', authenticate, controller.getUser.bind(controller))
 router.patch('/update', authenticate, controller.updateUser.bind(controller))
 router.delete('/delete', authenticate, controller.deleteUser.bind(controller))
 router.post('/import-contacts', authenticate, controller.importContacts.bind(controller))
+router.get("/get-contacts", authenticate, controller.getContacts.bind(controller))
+router.patch("/sync-contacts", authenticate, controller.syncContacts.bind(controller))
 
 
 export default router;

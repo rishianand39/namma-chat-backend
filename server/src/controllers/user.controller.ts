@@ -4,7 +4,7 @@ import { UserService } from "../services/user.service";
 import { RESPONSE_CODE } from "../constant";
 
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) { }
 
   async getUser(req: Request, res: Response) {
     try {
@@ -42,7 +42,7 @@ export class UserController {
     try {
       const userId = (req as any).user.user_id;
       const data = req.body;
-      const user = await this.userService.updateUser({ user_id : userId, data });
+      const user = await this.userService.updateUser({ user_id: userId, data });
 
       if (!user) {
         res.json(
@@ -107,7 +107,8 @@ export class UserController {
   async importContacts(req: Request, res: Response) {
     try {
       const phoneNumbers = req.body.phone_numbers;
-      const contacts = await this.userService.importContacts(phoneNumbers);
+      const userId = (req as any).user.user_id;
+      const contacts = await this.userService.importContacts(userId, phoneNumbers);
 
       res.json(
         sendResponse({
@@ -125,5 +126,45 @@ export class UserController {
         })
       );
     }
-  } 
+  }
+  async getContacts(req: Request, res: Response) {
+    try {
+      const userId = (req as any).user.user_id;
+      const contacts = await this.userService.getContacts(userId);
+
+      res.json(
+        sendResponse({
+          status: true,
+          code: RESPONSE_CODE?.SUCCESS,
+          data: contacts,
+        })
+      );
+    } catch (err: any) {
+      res.json(
+        sendResponse({
+          status: false,
+          code: RESPONSE_CODE?.SERVER_ERROR,
+          message: err.message,
+        })
+      );
+    }
+  }
+
+  async syncContacts(req: Request, res: Response) {
+
+    const userId = (req as any).user.user_id;
+    if(!req.body?.phone_numbers){
+      res.json(sendResponse({
+        status : false,
+        message : 'phone_numbers is required',
+        code : RESPONSE_CODE?.BAD_REQUEST
+      }))
+    }
+
+    const response = await this.userService.syncContacts(userId, req.body?.phone_numbers);
+    res.json(
+      sendResponse(response)
+    );
+
+  }
 }

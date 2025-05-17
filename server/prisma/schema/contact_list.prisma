@@ -1,0 +1,26 @@
+model ContactList {
+  id          String   @id @default(uuid())
+  owner_id    String    @unique
+  contacts    Json     // array of contacts (registered + unregistered)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  user        User     @relation("userContactList", fields: [owner_id], references: [id], onDelete: Cascade)
+}
+
+// ---------contacts JSON-------------
+// [
+//   {
+//     "id": "uuid", 
+//     "name": "Rishi", 
+//     "phone": "88252xxx", 
+//     "profile_image": null, 
+//     "is_registered": true
+//   },
+//   {
+//     "id": null, 
+//     "name": null, 
+//     "phone": "91552xxx", 
+//     "is_registered": false, 
+//     "invite_link": "https://..."
+//   }
+// ]

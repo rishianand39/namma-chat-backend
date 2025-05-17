@@ -10,6 +10,7 @@ model User {
   updated_at    DateTime   @updatedAt
   is_online     Boolean    @default(false)
   last_seen     DateTime?
+  contact_list  ContactList? @relation("userContactList")
 }
 
 
