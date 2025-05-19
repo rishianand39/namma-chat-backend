@@ -103,7 +103,8 @@ class UserController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const phoneNumbers = req.body.phone_numbers;
-                const contacts = yield this.userService.importContacts(phoneNumbers);
+                const userId = req.user.user_id;
+                const contacts = yield this.userService.importContacts(userId, phoneNumbers);
                 res.json((0, helper_1.sendResponse)({
                     status: true,
                     code: constant_1.RESPONSE_CODE === null || constant_1.RESPONSE_CODE === void 0 ? void 0 : constant_1.RESPONSE_CODE.SUCCESS,
@@ -117,6 +118,41 @@ class UserController {
                     message: err.message,
                 }));
             }
+        });
+    }
+    getContacts(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const userId = req.user.user_id;
+                const contacts = yield this.userService.getContacts(userId);
+                res.json((0, helper_1.sendResponse)({
+                    status: true,
+                    code: constant_1.RESPONSE_CODE === null || constant_1.RESPONSE_CODE === void 0 ? void 0 : constant_1.RESPONSE_CODE.SUCCESS,
+                    data: contacts,
+                }));
+            }
+            catch (err) {
+                res.json((0, helper_1.sendResponse)({
+                    status: false,
+                    code: constant_1.RESPONSE_CODE === null || constant_1.RESPONSE_CODE === void 0 ? void 0 : constant_1.RESPONSE_CODE.SERVER_ERROR,
+                    message: err.message,
+                }));
+            }
+        });
+    }
+    syncContacts(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var _a, _b;
+            const userId = req.user.user_id;
+            if (!((_a = req.body) === null || _a === void 0 ? void 0 : _a.phone_numbers)) {
+                res.json((0, helper_1.sendResponse)({
+                    status: false,
+                    message: 'phone_numbers is required',
+                    code: constant_1.RESPONSE_CODE === null || constant_1.RESPONSE_CODE === void 0 ? void 0 : constant_1.RESPONSE_CODE.BAD_REQUEST
+                }));
+            }
+            const response = yield this.userService.syncContacts(userId, (_b = req.body) === null || _b === void 0 ? void 0 : _b.phone_numbers);
+            res.json((0, helper_1.sendResponse)(response));
         });
     }
 }

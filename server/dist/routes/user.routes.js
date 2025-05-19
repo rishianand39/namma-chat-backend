@@ -10,4 +10,6 @@ router.get('/', auth_middleware_1.authenticate, controller.getUser.bind(controll
 router.patch('/update', auth_middleware_1.authenticate, controller.updateUser.bind(controller));
 router.delete('/delete', auth_middleware_1.authenticate, controller.deleteUser.bind(controller));
 router.post('/import-contacts', auth_middleware_1.authenticate, controller.importContacts.bind(controller));
+router.get("/get-contacts", auth_middleware_1.authenticate, controller.getContacts.bind(controller));
+router.patch("/sync-contacts", auth_middleware_1.authenticate, controller.syncContacts.bind(controller));
 exports.default = router;

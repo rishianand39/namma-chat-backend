@@ -2,9 +2,10 @@ import { Request, Response } from "express";
 import { sendResponse } from "../utils/helper";
 import { UserService } from "../services/user.service";
 import { RESPONSE_CODE } from "../constant";
+import { MessageService } from "../services/message.service";
 
 export class UserController {
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private messageService: MessageService) { }
 
   async getUser(req: Request, res: Response) {
     try {
@@ -153,15 +154,25 @@ export class UserController {
   async syncContacts(req: Request, res: Response) {
 
     const userId = (req as any).user.user_id;
-    if(!req.body?.phone_numbers){
+    if (!req.body?.phone_numbers) {
       res.json(sendResponse({
-        status : false,
-        message : 'phone_numbers is required',
-        code : RESPONSE_CODE?.BAD_REQUEST
+        status: false,
+        message: 'phone_numbers is required',
+        code: RESPONSE_CODE?.BAD_REQUEST
       }))
     }
 
     const response = await this.userService.syncContacts(userId, req.body?.phone_numbers);
+    res.json(
+      sendResponse(response)
+    );
+
+  }
+  async getChatList(req: Request, res: Response) {
+
+    const user_id = (req as any).user.user_id;
+
+    const response = await this.messageService?.getChatList(user_id);
     res.json(
       sendResponse(response)
     );

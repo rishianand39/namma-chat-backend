@@ -26,8 +26,8 @@ const authenticate = (req, res, next) => {
 };
 exports.authenticate = authenticate;
 const authenticateSocket = (socket, next) => {
-    var _a;
-    const token = (_a = socket.handshake.headers.token) === null || _a === void 0 ? void 0 : _a.split(" ")[1];
+    var _a, _b;
+    const token = ((_a = socket.handshake.auth.token) === null || _a === void 0 ? void 0 : _a.split(" ")[1]) || ((_b = socket.handshake.headers.token) === null || _b === void 0 ? void 0 : _b.split(" ")[1]);
     if (!token) {
         return next(new Error("Access Denied: No token provided"));
     }

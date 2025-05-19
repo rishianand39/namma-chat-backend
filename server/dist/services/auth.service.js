@@ -160,7 +160,7 @@ class AuthService {
         });
     }
     updateUser(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ userId, data }) {
+        return __awaiter(this, arguments, void 0, function* ({ userId, data, }) {
             const user = yield this.prisma.user.update({
                 where: { id: userId },
                 data,
@@ -175,7 +175,7 @@ class AuthService {
                     email: user.email,
                     profile_image: user.profile_image,
                     about: user.about,
-                }
+                },
             };
         });
     }

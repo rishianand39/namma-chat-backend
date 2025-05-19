@@ -41,6 +41,8 @@ export async function registerMessageHandlers(
       timestamp: new Date().toISOString(),
       message_id: savedMessage.id,
     };
+    // add chat summery to database
+
 
     if (receiverSocketId) {
       io.to(receiverSocketId).emit("receive-message", response);
@@ -51,12 +53,20 @@ export async function registerMessageHandlers(
         delivered_at: new Date().toISOString(),
       });
 
-      // Optionally update DB
+      // update DB
       await messageService.markMessageAsDelivered({
         message_id: savedMessage.id,
         delivered_at: new Date(),
       });
     }
+    await messageService?.addOrUpdateChatList({
+      user_id: userId,
+      contact_user_id: data.receiver_user_id,
+      last_message: data.message,
+      message_id: savedMessage.id,
+      last_timestamp : new Date(),
+      unread_count : 1
+    })
   });
 
   // Handle message reading

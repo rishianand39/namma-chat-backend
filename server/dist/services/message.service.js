@@ -20,10 +20,10 @@ class MessageService {
             return yield this.prisma.message.findMany({
                 where: {
                     receiver_user_id: user_id,
-                    read: false,
+                    is_read: false,
                 },
                 orderBy: {
-                    timestamp: "asc",
+                    updated_at: "asc",
                 },
             });
         });
@@ -46,7 +46,7 @@ class MessageService {
                     id: payload.message_id,
                 },
                 data: {
-                    read: true,
+                    is_read: true,
                     read_at: payload.read_at,
                 },
             });
