@@ -1,17 +1,18 @@
 model User {
-  id            String     @id @default(uuid())
-  email         String?    @unique
+  id            String       @id @default(uuid())
+  email         String?      @unique
   password      String?
-  phone         String     @unique
+  phone         String       @unique
   name          String?
   about         String?
   profile_image String?
-  created_at    DateTime   @default(now())
-  updated_at    DateTime   @updatedAt
-  is_online     Boolean    @default(false)
+  created_at    DateTime     @default(now())
+  updated_at    DateTime     @updatedAt
+  is_online     Boolean      @default(false)
   last_seen     DateTime?
   contact_list  ContactList? @relation("userContactList")
+
+  // Relation fields (opposites of the two relations above)
+  chat_list_as_owner   ChatList[] @relation("ChatListOwner")
+  chat_list_as_contact ChatList[] @relation("ChatListContact")
 }
-
-
-

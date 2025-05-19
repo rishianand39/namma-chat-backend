@@ -6,7 +6,6 @@ dotenv.config();
 export class UserService {
   private prisma = new PrismaClient();
 
-
   async getUser(user_id: string) {
     let user = await this.prisma.user.findFirst({
       where: { id: user_id },
@@ -137,7 +136,7 @@ export class UserService {
       last_synced_at: updated_at
     };
   }
-  
+
   async syncContacts(user_id: string, newContacts: string[]) {
         const registeredUsers = await this.prisma.user.findMany({
       where: {

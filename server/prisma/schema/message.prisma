@@ -1,10 +1,18 @@
 model Message {
-  id              String   @id @default(uuid())
-  sender_user_id    String
-  receiver_user_id  String
-  content         String
-  timestamp       DateTime @default(now())
-  read            Boolean  @default(false)
-  read_at         DateTime?
-  delivered_at  DateTime?
+  id               String    @id @default(uuid())
+  sender_user_id   String
+  receiver_user_id String
+  content          String
+  created_at       DateTime  @default(now())
+  updated_at       DateTime  @default(now()) @updatedAt
+  is_sent          Boolean   @default(false)
+  sent_at          DateTime  @default(now())
+  is_delivered     Boolean   @default(false)
+  delivered_at     DateTime?
+  is_read          Boolean?
+  read_at          DateTime?
+  is_deleted       Boolean   @default(false)
+  is_edited        Boolean   @default(false)
+  edited_at        DateTime?
+  quote_message_id String?
 }
