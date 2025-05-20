@@ -168,6 +168,7 @@ export class UserController {
     );
 
   }
+  
   async getChatList(req: Request, res: Response) {
 
     const user_id = (req as any).user.user_id;

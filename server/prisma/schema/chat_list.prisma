@@ -2,12 +2,11 @@ model ChatList {
     id              String    @id @default(uuid())
     user_id         String
     contact_user_id String
-    last_message     String?
-    last_timestamp   DateTime?
-    unread_count     Int       @default(0)
-
-    user        User @relation("ChatListOwner", fields: [user_id], references: [id], onDelete: Cascade)
-    contact_user User @relation("ChatListContact", fields: [contact_user_id], references: [id], onDelete: Cascade)
+    message_id      String? @unique
+    unread_count    Int       @default(0)
+    message         Message?  @relation("messageChatList", fields: [message_id], references: [id], onDelete: Cascade)
+    user            User      @relation("ChatListOwner", fields: [user_id], references: [id], onDelete: Cascade)
+    contact_user    User      @relation("ChatListContact", fields: [contact_user_id], references: [id], onDelete: Cascade)
 
     @@unique([user_id, contact_user_id])
 }

@@ -15,4 +15,5 @@ model Message {
   is_edited        Boolean   @default(false)
   edited_at        DateTime?
   quote_message_id String?
+  chat_list        ChatList? @relation("messageChatList")
 }

@@ -1,5 +1,6 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { RESPONSE_CODE } from "../constant";
+import { UserService } from "./user.service";
 
 export class MessageService {
   private prisma = new PrismaClient();
@@ -60,80 +61,107 @@ export class MessageService {
 
   async getChatList(user_id: string) {
     try {
-      let history = await this.prisma.chatList.findMany({
+      const chatHistory = await this.prisma.chatList.findMany({
         where: {
-          user_id: user_id
+          OR: [
+            { user_id: user_id },
+            { contact_user_id: user_id },
+          ]
+        },
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              profile_image: true,
+              phone: true
+            }
+          },
+          contact_user: {
+            select: {
+              id: true,
+              name: true,
+              profile_image: true,
+              phone: true
+            }
+          },
+          message: {
+            select: {
+              id: true,
+              content: true,
+              updated_at: true,
+              is_sent: true,
+              sent_at: true,
+              is_delivered: true,
+              delivered_at: true,
+              is_read: true,
+              read_at: true,
+              is_deleted: true,
+              is_edited: true,
+            }
+          }
         }
-      })
+      });
+
+    
+      const formatted = chatHistory.map(chat => {
+        const contact = chat.user_id === user_id ? chat.contact_user : chat.user;
+        return {
+          id: chat.id,
+          last_message: chat.last_message,
+          last_timestamp: chat.last_timestamp,
+          contact_user: contact,
+          message : chat.message,
+        };
+      });
       
       return {
         status: true,
         code: RESPONSE_CODE?.SUCCESS,
-        data: history
+        data: formatted
       };
     } catch (error) {
+      console.error(error);
       return {
-        status: true,
+        status: false,
         code: RESPONSE_CODE?.SERVER_ERROR,
-        message: 'Contacts synced successfully'
+        message: 'Failed to fetch chat list'
       };
     }
   }
 
+
   async addOrUpdateChatList({
     user_id,
     contact_user_id,
-    last_message,
-    last_timestamp,
-    unread_count,
     message_id
-  } : {
+  }: {
     user_id: string;
     contact_user_id: string;
-    last_message: string;
-    last_timestamp: Date;
-    unread_count: number;
     message_id: string;
   }) {
     try {
-      let alreadyExists = await this.prisma.chatList.findFirst({
+      await this.prisma.chatList.upsert({
         where: {
-          user_id: user_id,
-          contact_user_id: contact_user_id
-        }
-      })
-      if (alreadyExists) {
-         await this.prisma.chatList.update({
-          where: {
-            id: alreadyExists.id
+          user_id_contact_user_id: {
+            user_id: user_id,
+            contact_user_id: contact_user_id,
           },
-          data: {
-            last_message: last_message,
-            last_timestamp: last_timestamp,
-            unread_count: unread_count
-          }
-        })
-        return {
-          status: true,
-          code: RESPONSE_CODE?.SUCCESS,
-          data: 'Chat summary updated successfully',
-        };
-      }
-
-      // If not exists, create a new chat
-      await this.prisma.chatList.create({
-        data: {
+        },
+        update: {
+          message_id: message_id,
+        },
+        create: {
           user_id: user_id,
           contact_user_id: contact_user_id,
-          last_message: last_message,
-          last_timestamp: last_timestamp,
-          unread_count: unread_count
-        }
-      })
+          message_id: message_id,
+        },
+      });
+
       return {
         status: true,
         code: RESPONSE_CODE?.SUCCESS,
-        data: 'New chat added successfully',
+        data: 'chat summary updated successfully',
       };
     } catch (error: any) {
       return {

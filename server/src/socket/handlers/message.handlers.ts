@@ -35,6 +35,7 @@ export async function registerMessageHandlers(
       content: data.message,
     });
 
+
     const response: MessageResponse = {
       message: data.message,
       sender_user_id: userId,
@@ -62,11 +63,9 @@ export async function registerMessageHandlers(
     await messageService?.addOrUpdateChatList({
       user_id: userId,
       contact_user_id: data.receiver_user_id,
-      last_message: data.message,
       message_id: savedMessage.id,
-      last_timestamp : new Date(),
-      unread_count : 1
     })
+ 
   });
 
   // Handle message reading
