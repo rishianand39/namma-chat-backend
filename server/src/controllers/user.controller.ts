@@ -39,6 +39,7 @@ export class UserController {
       );
     }
   }
+  
   async updateUser(req: Request, res: Response) {
     try {
       const userId = (req as any).user.user_id;

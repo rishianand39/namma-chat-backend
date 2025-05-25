@@ -108,8 +108,6 @@ export class MessageService {
         const contact = chat.user_id === user_id ? chat.contact_user : chat.user;
         return {
           id: chat.id,
-          last_message: chat.last_message,
-          last_timestamp: chat.last_timestamp,
           contact_user: contact,
           message : chat.message,
         };
