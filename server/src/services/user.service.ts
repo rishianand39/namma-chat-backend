@@ -138,7 +138,8 @@ export class UserService {
   }
 
   async syncContacts(user_id: string, newContacts: string[]) {
-        const registeredUsers = await this.prisma.user.findMany({
+    
+    const registeredUsers = await this.prisma.user.findMany({
       where: {
         phone: {
           in: newContacts,
@@ -151,8 +152,6 @@ export class UserService {
         profile_image: true,
         created_at: true,
         updated_at: true,
-        is_online: true,
-        last_seen: true,
 
       },
     });
@@ -185,13 +184,10 @@ export class UserService {
 
     const allContacts = [...registeredContacts, ...unregisteredContacts];
     try {
-      await this.prisma.contactList.update({
-        where: {
-          owner_id: user_id
-        },
-        data: {
-          contacts: allContacts
-        }
+      await this.prisma.contactList.upsert({
+        where: { owner_id: user_id },
+        update: { contacts: allContacts },
+        create: { owner_id: user_id, contacts: allContacts }
       });
 
       return {

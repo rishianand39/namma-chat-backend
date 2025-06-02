@@ -15,7 +15,7 @@ export class AuthService {
     const expiresAt = new Date(Date.now() + Number(process.env.OTP_EXPIRY) * 60 * 1000); // OTP valid for specified minutes
 
     if (phone) {
-      await this.prisma.otp.deleteMany({
+      await this?.prisma?.otp?.deleteMany({
         where: {
           phone,
         },
@@ -101,7 +101,7 @@ export class AuthService {
       });
 
       let user = await this.prisma.user.findUnique({ where: { phone: phone } });
-
+      let new_user = user ? false : true;
       if (!user) {
         user = await this.prisma.user.create({
           data: {
@@ -119,10 +119,11 @@ export class AuthService {
       }
 
       const geneateToken = await this.geneateToken(user.id);
-
+      
       return {
         data: {
           token: geneateToken,
+          new_user : new_user
         },
         message: "OTP verified successfully",
         status: true,
