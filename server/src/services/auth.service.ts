@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import twilio from "twilio";
 import { RESPONSE_CODE } from "../constant";
-import { stat } from "fs";
 dotenv.config();
 
 export class AuthService {
